@@ -6,27 +6,31 @@ Created on Wed Mar 18 16:30:31 2020
 @author: mariano
 """
 
-# Librerías externas NumPy, SciPy y Matplotlib
-from scipy.signal import TransferFunction
-import matplotlib.pyplot as plt
+import scipy.signal as sig
+from pytc2.sistemas_lineales import analyze_sys
 import numpy as np
+import math
+from math import log, e, sqrt, ceil
+
+# Cargamos la funcion transferencia como vectores de sus coeficientes.
+amax = 1
+amin = 12
+fp = 1
+fs = 2
+
+ee = 10**(amax/10) - 1
+n = ceil(log(sqrt(((10**(amin/10))-1)/((10**(amax/10)-1))))/log(fs/fp))
 
 
-# Librería de TC2, esta la vas a usar mucho
-from pytc2.sistemas_lineales import pzmap, GroupDelay, bodePlot
 
-R1 = 1
-R2 = 1
-R3 = 1000 
-C = 0.000001
+num = np.array([ 1.96 ])
+den = np.array([ 1, 2.51, 3.14, 1.96 ])
 
-my_tf = TransferFunction( [1,-R2/(R1*R3*C)], [1,1/(R3*C)] )
+H1 = sig.TransferFunction( num, den )
 
+# mostramos la transferencia construida
+#display(H1)
 
-plt.close('all')
+#plt.sca(bodePlot(H1))
 
-bodePlot(my_tf, fig_id=1, filter_description = '' )
-
-pzmap(my_tf, fig_id=2, filter_description = '') #S plane pole/zero plot
-
-GroupDelay(my_tf, fig_id=3, filter_description = '')
+analyze_sys(H1,sys_name='TS3')
