@@ -7,8 +7,9 @@ Created on Sat Jun 17 14:39:56 2023
 
 import scipy.signal as sig
 import math
-from pytc2.sistemas_lineales import pretty_print_lti,tf2sos_analog,pretty_print_SOS
+#from pytc2.sistemas_lineales import pretty_print_lti,tf2sos_analog,pretty_print_SOS
 from IPython.display import display, Math, Latex
+from pytc2.sistemas_lineales import pretty_print_SOS
 
 amax = 0.5
 amin = 24
