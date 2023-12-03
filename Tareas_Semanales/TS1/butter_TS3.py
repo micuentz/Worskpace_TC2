@@ -7,27 +7,28 @@ Created on Wed Mar 18 16:30:31 2020
 """
 
 import scipy.signal as sig
-from pytc2.sistemas_lineales import analyze_sys
+from pytc2.sistemas_lineales import analyze_sys, pretty_print_lti
 import numpy as np
 from math import log, sqrt, ceil
 
 # Cargamos la funcion transferencia como vectores de sus coeficientes.
 amax = 1
-amin = 12
+amin = 30
 fp = 1
-fs = 2
+fs = 4
 
 ee = 10**(amax/10) - 1
 n = ceil(log(sqrt(((10**(amin/10))-1)/((10**(amax/10)-1))))/log(fs/fp))
+omega_Butter = ee**(-1/(2*n))
 
 butter = np.zeros(2*n + 1)
-butter[-1] = 1/ee
+butter[-1] = 1
 butter[0] = -1
 
 aa = np.roots(butter)
 raices = aa[ np.real(aa) < 0 ]
 
-print( raices )
+#print( raices )
 
 poli1_0 = np.array([ 1, -raices[0] ])
 poli1_1 = np.array([ 1, -raices[1] ])
@@ -37,7 +38,11 @@ poli_aux = np.polymul(poli1_0,poli1_1)
 
 den = np.polymul( poli_aux , poli1_2 )
 
-print( den )
+for i in range(n+1):
+    den[i] = den[i]/(omega_Butter**(i))
+    print(i,den[i])
+
+print(den)
 
 #num = np.array([ 1.96 ])
 #den = np.array([ 1, 2.51, 3.14, 1.96 ])
